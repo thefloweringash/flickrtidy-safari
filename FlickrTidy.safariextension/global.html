@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>FlickrTidy Global HTML page</title>
+
+<!-- Proxy for settings -->
+
+<script type="text/javascript">
+
+messageReplies = {
+	"maybe-pools-last":    { depends: "pools-last-enabled",    sends: "pools-last" },
+	"maybe-hide-comments": { depends: "comment-hider-enabled", sends: "hide-comments",
+	                         context: function() {
+	                            return safari.extension.settings.getItem("comment-hide-style");
+	                         } },
+};
+
+safari.application.addEventListener("message", function(e) {
+	reply = messageReplies[e.name];
+	if (reply && safari.extension.settings.getItem(reply.depends)) {
+		var value = reply.context && reply.context();
+		e.target.page.dispatchMessage(reply.sends, value);
+	}
+}, false);
+
+</script>
+</head>
+<body></body>
+</html
